@@ -14,10 +14,25 @@ jobs:
           git clone https://github.com/kiecok/test.git
           cd test
           rm -rf whgle/*
-          git clone https://github.com/benbusby/whoogle-search.git whgle
+          #git clone https://github.com/benbusby/whoogle-search.git whgle
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
           git commit -m "$(date "+%Y%m%d-%H%M")"
           git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/kiecok/test.git
 
+ sync:
+    runs-on: ubuntu-latest
+    needs: clean
+    steps:
+      - name: clean
+        run: |
+          git clone https://github.com/kiecok/test.git
+          cd test
+          #rm -rf whgle/*
+          git clone https://github.com/benbusby/whoogle-search.git whgle
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "$(date "+%Y%m%d-%H%M")"
+          git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/kiecok/test.git
