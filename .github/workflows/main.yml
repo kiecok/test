@@ -31,6 +31,7 @@ jobs:
           mkdir whgle
           git clone https://github.com/benbusby/whoogle-search.git tmp
           mv tmp/* whgle/
+          rm -rf tmp
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
