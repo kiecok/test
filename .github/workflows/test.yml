@@ -1,0 +1,54 @@
+name: test
+
+on:
+
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN:  ${{ secrets.PAT }}
+  TARGET_REPOSITORY: ${{ secrets.TR }}
+  TARGET_DIR: ${TARGET_REPOSITORY##*/}
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone
+        run: |
+          git clone https://github.com/${TARGET_REPOSITORY}.git
+          cd "${TARGET_DIR}"
+          rm -rf whgle searx searxng
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "$(date "+%Y%m%d-%H%M")"
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${TARGET_REPOSITORY}.git --force
+
+  sync:
+    runs-on: ubuntu-latest
+    env:
+       UPSTREAM_REPOSITORY1: ${{ secrets.WH }}
+       UPSTREAM_REPOSITORY2: ${{ secrets.SX }}
+    needs: clean
+    steps:
+      - name: clone
+        run: |
+          git clone https://github.com/${TARGET_REPOSITORY}.git
+          cd "${TARGET_DIR}"
+          mkdir whgle
+          git clone https://github.com/${UPSTREAM_REPOSITORY1}.git tmp
+          mv tmp/* whgle/
+          rm -rf tmp
+          mkdir searx
+          git clone https://github.com/${UPSTREAM_REPOSITORY2}.git -b "main" --single-branch tmp
+          mv tmp/* searx/
+          rm -rf tmp
+          mkdir searxng
+          git clone https://github.com/${UPSTREAM_REPOSITORY2}.git -b "searxng" --single-branch tmp
+          mv tmp/* searxng/
+          rm -rf tmp
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "$(date "+%Y%m%d-%H%M")"
+          git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${TARGET_REPOSITORY}.git --force
