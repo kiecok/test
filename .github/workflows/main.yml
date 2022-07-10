@@ -15,7 +15,6 @@ jobs:
           cd test
           #rm -rf whgle
           git clone https://github.com/benbusby/whoogle-search.git whgle
-          cd whgle
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
