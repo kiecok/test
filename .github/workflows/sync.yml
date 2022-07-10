@@ -1,0 +1,47 @@
+name: SYNC
+
+on:
+
+  workflow_dispatch:
+
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone
+        run: |
+          git clone https://github.com/kiecok/test.git
+          cd test
+          rm -rf whgle searx searxng
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "$(date "+%Y%m%d-%H%M")"
+          git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/kiecok/test.git --force
+
+  sync:
+    runs-on: ubuntu-latest
+    needs: clean
+    steps:
+      - name: clone
+        run: |
+          git clone https://github.com/kiecok/test.git
+          cd test
+          mkdir whgle
+          git clone https://github.com/benbusby/whoogle-search.git tmp
+          mv tmp/* whgle/
+          rm -rf tmp
+          mkdir searx
+          git clone https://github.com/yellowhat/searx-heroku.git tmp
+          mv tmp/* searx/
+          rm -rf tmp
+          mkdir searxng
+          git clone https://github.com/yellowhat/searx-heroku.git -b "searxng" --single-branch tmp
+          mv tmp/* searxng/
+          rm -rf tmp
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "$(date "+%Y%m%d-%H%M")"
+          git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/kiecok/test.git --force
