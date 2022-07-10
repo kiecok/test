@@ -14,8 +14,7 @@ jobs:
           git clone https://github.com/kiecok/test.git
           cd test
           rm -rf whgle
-          mkdir whgle
-          git clone https://github.com/benbusby/whoogle-search.git whgle
+          #git clone https://github.com/benbusby/whoogle-search.git whgle
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
