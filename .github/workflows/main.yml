@@ -37,4 +37,3 @@ jobs:
           git add .
           git commit -m "$(date "+%Y%m%d-%H%M")"
           git push https://${GITHUB_ACTOR}:${{ secrets.PAT }}@github.com/kiecok/test.git --force
-
