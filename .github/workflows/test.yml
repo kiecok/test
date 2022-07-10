@@ -7,7 +7,7 @@ on:
 env:
   GITHUB_TOKEN:  ${{ secrets.PAT }}
   TARGET_REPOSITORY: ${{ secrets.TR }}
-  TARGET_DIR: ${TARGET_REPOSITORY##*/}
+  #TARGET_DIR: ${TARGET_REPOSITORY##*/}
 
 jobs:
   clean:
@@ -15,8 +15,9 @@ jobs:
     steps:
       - name: clone
         run: |
+          target_dir=${TARGET_REPOSITORY##*/}
           git clone https://github.com/${TARGET_REPOSITORY}.git
-          cd "${TARGET_DIR}"
+          cd "${target_dir}"
           rm -rf whgle searx searxng
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -33,8 +34,9 @@ jobs:
     steps:
       - name: clone
         run: |
+          target_dir=${TARGET_REPOSITORY##*/}
           git clone https://github.com/${TARGET_REPOSITORY}.git
-          cd "${TARGET_DIR}"
+          cd "${target_dir}"
           mkdir whgle
           git clone https://github.com/${UPSTREAM_REPOSITORY1}.git tmp
           mv tmp/* whgle/
