@@ -13,7 +13,6 @@ jobs:
         run: |
           git clone https://github.com/kiecok/test.git
           cd test
-          #mkdir whgle
           rm -rf whgle/*
           git clone https://github.com/benbusby/whoogle-search.git whgle
           git config user.name github-actions
